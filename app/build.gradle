@@ -49,4 +49,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     implementation project(":jokes") //added Java library through android wizard
+    implementation project(":jokesactivity") //android Library through android wizard
 }

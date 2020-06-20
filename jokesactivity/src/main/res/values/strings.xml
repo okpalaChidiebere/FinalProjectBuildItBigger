@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">JokesActivity</string>
+    <string name="no_jokes">No jokes Oops</string>
+</resources>
