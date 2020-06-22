@@ -7,17 +7,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.android.jokesactivity.JokesActivity;
 
 public class MainActivity extends AppCompatActivity implements JokeListener {
 
     private String mJoke;
+    private ProgressBar mLoadingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     }
 
 
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements JokeListener {
     public void tellJoke(View view) {
 
         new EndpointsAsyncTask(MainActivity.this).execute();
+        showWorkInProgress();
     }
 
     @Override
@@ -53,10 +58,17 @@ public class MainActivity extends AppCompatActivity implements JokeListener {
         Log.v("onJokeLoaded", "Joke is: " + joke);
         this.mJoke = joke;
 
+        showWorkFinished();
         Intent myIntent = new Intent(this, JokesActivity.class);
         myIntent.putExtra(JokesActivity.JOKES_EXTRA, mJoke); //passing jokes from the Java Library to the Android Library
         startActivity(myIntent);
     }
 
+    private void showWorkInProgress() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
 
+    private void showWorkFinished() {
+        mLoadingIndicator.setVisibility(View.GONE);
+    }
 }

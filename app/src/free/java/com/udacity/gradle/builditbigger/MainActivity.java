@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.android.jokesactivity.JokesActivity;
 import com.google.android.gms.ads.AdListener;
@@ -19,12 +20,14 @@ public class MainActivity extends AppCompatActivity implements JokeListener {
 
     private String mJoke;
     private InterstitialAd mInterstitialAd;
+    private ProgressBar mLoadingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         setInterstitialAdToDisplay();
 
     }
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements JokeListener {
     public void tellJoke(View view) {
 
         new EndpointsAsyncTask(MainActivity.this).execute();
+        showWorkInProgress();
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements JokeListener {
     public void onJokeLoaded(String joke) {
         Log.v("onJokeLoaded", "Joke is: " + joke);
         this.mJoke = joke;
+        showWorkFinished();
     }
 
     private void launchJokeActivity() {
@@ -114,4 +119,11 @@ public class MainActivity extends AppCompatActivity implements JokeListener {
     }
 
 
+    private void showWorkInProgress() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    private void showWorkFinished() {
+        mLoadingIndicator.setVisibility(View.GONE);
+    }
 }
